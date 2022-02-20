@@ -21,9 +21,10 @@ function App() {
   // Hours set to midnight to ensure user selection of date+time always before this date
   const apodLatest = new Date().setHours(23,59,59); 
 
-  //API URL
+  //NASA API URL
   const url = "https://api.nasa.gov/planetary/apod?api_key=" + process.env.REACT_APP_NASA_API_KEY + "&date=";
 
+  // Fetches photo from NASA API
   const fetchPost = async (uDate) => {
     setIsLoading(true);
     setHasError(false);
@@ -43,6 +44,14 @@ function App() {
     setIsLoading(false);
   };
 
+  // Sets userDate as today if null
+  // e.g. loads today's photo on first render
+  if (!userDate) {
+    setUserdate(new Date());
+    fetchPost(format(new Date(), 'yyyy-MM-dd'));
+  }
+
+  // Adjusts HTML for image vs video
   function MediaType(media) {
     var mediaLink;
     // Determines whether APOD picture is image or video
@@ -61,6 +70,7 @@ function App() {
     );
   }
 
+  // Component that serves photo, with error handling
   function Picture() {
     // Return if server has error
     if (hasError) {
@@ -79,6 +89,7 @@ function App() {
       return MediaType(apod.media_type);
     }
     // Default return if date not chosen or no error
+    // This should never return: userDate is set as today if null on load
     return <p className="userMsg">Select a date between 16-Jun-1995 and today</p>;
   }
 
