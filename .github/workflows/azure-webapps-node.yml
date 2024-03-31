@@ -51,11 +51,16 @@ jobs:
       with:
         name: node-app
 
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        tenant-id: 'd251f48c-308b-48f3-a87e-e97ab45768ef'
+        subscription-id: 'FIXME'
+        client-id: 'FIXME'
 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp 
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
